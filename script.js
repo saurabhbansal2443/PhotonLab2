@@ -12,6 +12,10 @@ const resetBtn = document.getElementById("reset");
 const downloadBtn = document.getElementById("downloadBtn");
 
 let image = new Image();
+let isSpeia = false;
+
+const activeBtnColor = "#4896fcff";
+const btnColor = "#ffdab3";
 
 fileInput.addEventListener("change", function (e) {
   const file = e.target.files[0];
@@ -36,12 +40,46 @@ function applyBrightFilters() {
   const saturationValue = saturationBtn.value;
   const contrastValue = contrastBtn.value;
   const blurValue = blurBtn.value;
-  ctx.filter = `brightness(${brightnessValue}%)saturate(${saturationValue}%)contrast(${contrastValue}%)blur(${blurValue}px)`;
+  const sepiaValue = isSpeia ? 100 : 0;
+  ctx.filter = `brightness(${brightnessValue}%)saturate(${saturationValue}%)contrast(${contrastValue}%)blur(${blurValue}px)sepia(${sepiaValue}%)`;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+  if (saturationValue == 0) {
+    grayScaleBtn.style.backgroundColor = activeBtnColor;
+  } else {
+    grayScaleBtn.style.backgroundColor = btnColor;
+  }
+}
+
+function handleReset() {
+  brightnessBtn.value = 100;
+  saturationBtn.value = 100;
+  contrastBtn.value = 100;
+  blurBtn.value = 0;
+  if (isSpeia) {
+    handleSepiaFilter();
+  }
+  applyBrightFilters();
+}
+function handleGreyScale() {
+  saturationBtn.value = 0;
+  applyBrightFilters();
+}
+
+function handleSepiaFilter() {
+  isSpeia = !isSpeia;
+  applyBrightFilters();
+  if (isSpeia) {
+    sepiaBtn.style.backgroundColor = activeBtnColor;
+  } else {
+    sepiaBtn.style.backgroundColor = btnColor;
+  }
 }
 
 brightnessBtn.addEventListener("input", applyBrightFilters);
 saturationBtn.addEventListener("input", applyBrightFilters);
 contrastBtn.addEventListener("input", applyBrightFilters);
 blurBtn.addEventListener("input", applyBrightFilters);
+resetBtn.addEventListener("click", handleReset);
+grayScaleBtn.addEventListener("click", handleGreyScale);
+sepiaBtn.addEventListener("click", handleSepiaFilter);
