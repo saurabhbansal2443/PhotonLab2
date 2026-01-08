@@ -1,6 +1,4 @@
 const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
 const fileInput = document.getElementById("inputFile");
 const brightnessBtn = document.getElementById("brightness");
 const contrastBtn = document.getElementById("contrast");
@@ -10,6 +8,8 @@ const grayScaleBtn = document.getElementById("grayScale");
 const sepiaBtn = document.getElementById("sepia");
 const resetBtn = document.getElementById("reset");
 const downloadBtn = document.getElementById("downloadBtn");
+
+const ctx = canvas.getContext("2d");
 
 let image = new Image();
 let isSpeia = false;
@@ -29,7 +29,6 @@ fileInput.addEventListener("change", function (e) {
 });
 
 image.onload = () => {
-  console.log(ctx);
   canvas.height = image.height;
   canvas.width = image.width;
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -76,6 +75,16 @@ function handleSepiaFilter() {
   }
 }
 
+function handleDownloadBtn() {
+  const imageData = canvas.toDataURL("image/png");
+  const anchorTag = document.createElement("a");
+  anchorTag.href = imageData;
+  anchorTag.download = "Photon-lab.png";
+  document.body.appendChild(anchorTag);
+  anchorTag.click();
+  document.body.removeChild(anchorTag);
+}
+
 brightnessBtn.addEventListener("input", applyBrightFilters);
 saturationBtn.addEventListener("input", applyBrightFilters);
 contrastBtn.addEventListener("input", applyBrightFilters);
@@ -83,3 +92,4 @@ blurBtn.addEventListener("input", applyBrightFilters);
 resetBtn.addEventListener("click", handleReset);
 grayScaleBtn.addEventListener("click", handleGreyScale);
 sepiaBtn.addEventListener("click", handleSepiaFilter);
+downloadBtn.addEventListener("click", handleDownloadBtn);
