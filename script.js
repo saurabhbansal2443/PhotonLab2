@@ -30,3 +30,14 @@ image.onload = () => {
   canvas.width = image.width;
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 };
+
+function applyBrightFilters() {
+  const brightnessValue = brightnessBtn.value;
+  const saturationValue = saturationBtn.value;
+  ctx.filter = `brightness(${brightnessValue}%)saturate(${saturationValue}%)`;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+}
+
+brightnessBtn.addEventListener("input", applyBrightFilters);
+saturationBtn.addEventListener("input", applyBrightFilters);
